@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Library</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f7;color:#1a1a2e;min-height:100vh;}
+:root{--accent:#5c2d6e;--accent-light:#f3edf7;--border:#e0e0e0;--surface:#fff;--text-muted:#888;--danger:#c53030;--success:#1a6e38;}
+
+/* ── Header ── */
+.app-header{background:var(--accent);color:#fff;padding:0 24px;display:flex;align-items:center;gap:16px;height:48px;}
+.app-header a{color:rgba(255,255,255,.65);font-size:.8rem;text-decoration:none;}
+.app-header a:hover{color:#fff;}
+.app-title{font-weight:700;font-size:1rem;letter-spacing:.02em;}
+.header-spacer{flex:1;}
+.sync-status{font-size:.72rem;color:rgba(255,255,255,.7);}
+.btn-icon{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:.8rem;}
+.btn-icon:hover{background:rgba(255,255,255,.25);}
+
+/* ── Tabs ── */
+.tabs{background:var(--surface);border-bottom:2px solid var(--border);display:flex;padding:0 24px;gap:0;}
+.tab{padding:12px 20px;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab:hover:not(.active){color:#444;}
+
+/* ── Content ── */
+.content{padding:24px;max-width:1200px;margin:0 auto;}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.search-box{flex:1;max-width:320px;padding:7px 12px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;}
+.search-box:focus{outline:none;border-color:var(--accent);}
+.btn{padding:7px 16px;border-radius:6px;border:none;cursor:pointer;font-size:.83rem;font-weight:600;transition:all .15s;}
+.btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{opacity:.88;}
+.btn-ghost{background:none;border:1.5px solid var(--border);color:#444;}.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-danger{background:var(--danger);color:#fff;}.btn-danger:hover{opacity:.88;}
+.btn-sm{padding:4px 10px;font-size:.78rem;}
+
+/* ── Table ── */
+.data-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+.data-table th{background:#f8f4fb;padding:9px 12px;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);border-bottom:2px solid var(--border);}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:.84rem;vertical-align:middle;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:#faf7fc;}
+.tag{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:.7rem;padding:2px 7px;border-radius:10px;margin:1px;}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-muted);}
+.empty-state h3{margin-bottom:8px;font-size:1.1rem;}
+
+/* ── Modal ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:12px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.18);}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);}
+.modal-header h3{font-size:1rem;font-weight:700;}
+.modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text-muted);line-height:1;}
+.modal-body{padding:22px;}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;padding:14px 22px;border-top:1px solid var(--border);}
+
+/* ── Form fields ── */
+.field-group{margin-bottom:14px;}
+.field-group label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:5px;}
+.field-group input,.field-group select,.field-group textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;font-family:inherit;}
+.field-group input:focus,.field-group select:focus{outline:none;border-color:var(--accent);}
+.field-row{display:flex;gap:12px;}.field-row .field-group{flex:1;}
+.hint{font-size:.72rem;color:var(--text-muted);margin-top:3px;}
+
+/* ── Settings panel ── */
+.settings-panel{display:none;position:fixed;top:48px;right:0;width:340px;height:calc(100vh - 48px);background:var(--surface);border-left:1px solid var(--border);box-shadow:-4px 0 20px rgba(0,0,0,.12);z-index:500;padding:22px;overflow-y:auto;}
+.settings-panel.open{display:block;}
+.settings-panel h3{font-size:.95rem;font-weight:700;margin-bottom:16px;}
+.settings-panel .field-group{margin-bottom:12px;}
+
+/* ── Flash ── */
+.flash{padding:8px 14px;border-radius:6px;font-size:.82rem;margin-bottom:12px;display:none;}
+.flash.success{background:#e6f9ed;border:1px solid var(--success);color:var(--success);}
+.flash.error{background:#fff5f5;border:1px solid var(--danger);color:var(--danger);}
+.flash.show{display:block;}
+
+/* ── Count badge ── */
+.count-badge{font-size:.7rem;background:var(--accent);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <a href="https://my-apps-eight-beryl.vercel.app/">&#8592; My Apps</a>
+  <span class="app-title">&#128218; My Library</span>
+  <span class="header-spacer"></span>
+  <span class="sync-status" id="sync-status">Loading...</span>
+  <button class="btn-icon" onclick="syncFromGitHub()">&#8635; Sync</button>
+  <button class="btn-icon" onclick="toggleSettings()">&#9881;</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('stores')">Stores <span class="count-badge" id="cnt-stores">0</span></div>
+  <div class="tab" onclick="switchTab('items')">Items <span class="count-badge" id="cnt-items">0</span></div>
+  <div class="tab" onclick="switchTab('currencies')">Currencies <span class="count-badge" id="cnt-currencies">0</span></div>
+</div>
+
+<div class="content">
+  <div id="flash" class="flash"></div>
+
+  <!-- STORES -->
+  <div id="view-stores">
+    <div class="toolbar">
+      <input class="search-box" id="search-stores" placeholder="Search stores..." oninput="renderStores()">
+      <button class="btn btn-primary" onclick="openStoreModal()">+ Add Store</button>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Friendly Name</th><th>Official Name</th><th>City</th><th>Country</th><th>Category</th><th>VAT</th><th>Aliases</th><th></th>
+      </tr></thead>
+      <tbody id="stores-body"></tbody>
+    </table>
+  </div>
+
+  <!-- ITEMS -->
+  <div id="view-items" style="display:none">
+    <div class="toolbar">
+      <input class="search-box" id="search-items" placeholder="Search items..." oninput="renderItems()">
+      <button class="btn btn-primary" onclick="openItemModal()">+ Add Item</button>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Name</th><th>Aliases</th><th>Category</th><th>Unit</th><th>Price Range</th><th></th>
+      </tr></thead>
+      <tbody id="items-body"></tbody>
+    </table>
+  </div>
+
+  <!-- CURRENCIES -->
+  <div id="view-currencies" style="display:none">
+    <div class="toolbar">
+      <input class="search-box" id="search-currencies" placeholder="Search currencies..." oninput="renderCurrencies()">
+      <button class="btn btn-primary" onclick="openCurrencyModal()">+ Add Currency</button>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Code</th><th>Symbol</th><th>Name</th><th></th>
+      </tr></thead>
+      <tbody id="currencies-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- STORE MODAL -->
+<div class="modal-overlay" id="store-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="store-modal-title">Add Store</h3>
+      <button class="modal-close" onclick="closeModal('store-modal')">&#215;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-row">
+        <div class="field-group"><label>Friendly Name</label><input id="s-friendly" placeholder="e.g. My Local Supermarket"></div>
+        <div class="field-group"><label>Official Name (on receipt)</label><input id="s-name" placeholder="e.g. COOP ITALIA SPA"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Address</label><input id="s-address" placeholder="e.g. Via Roma 1"></div>
+        <div class="field-group"><label>City</label><input id="s-city" placeholder="e.g. Milan"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Country</label><input id="s-country" placeholder="e.g. Italy"></div>
+        <div class="field-group"><label>Category</label>
+          <select id="s-category">
+            <option value="">-- Select --</option>
+            <option>Supermarket</option><option>Pharmacy</option><option>Restaurant</option>
+            <option>Fashion</option><option>Electronics</option><option>Beauty</option>
+            <option>Hardware</option><option>Bakery</option><option>Petrol</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group"><label>VAT Number</label><input id="s-vat" placeholder="e.g. IT12345678901"></div>
+      <div class="field-group">
+        <label>Aliases (comma-separated receipt name variants)</label>
+        <input id="s-aliases" placeholder="e.g. COOP, COOP SPA, COOP ITALIA">
+        <div class="hint">Used by OCR to match this store from receipt text</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('store-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStore()">Save Store</button>
+    </div>
+  </div>
+</div>
+
+<!-- ITEM MODAL -->
+<div class="modal-overlay" id="item-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="item-modal-title">Add Item</h3>
+      <button class="modal-close" onclick="closeModal('item-modal')">&#215;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group"><label>Canonical Name</label><input id="i-name" placeholder="e.g. Whole Milk"></div>
+      <div class="field-group">
+        <label>Aliases (comma-separated receipt name variants)</label>
+        <input id="i-aliases" placeholder="e.g. LATTE INTERO, MILK FULL FAT">
+        <div class="hint">Used by OCR to recognise this item on receipts</div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Category</label>
+          <select id="i-category">
+            <option value="">-- Select --</option>
+            <option>Food</option><option>Beverage</option><option>Household</option>
+            <option>Beauty</option><option>Clothing</option><option>Electronics</option>
+            <option>Health</option><option>Pet</option><option>Baby</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field-group"><label>Typical Unit / Size</label><input id="i-unit" placeholder="e.g. 1L, 500g, 1 pack"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Min Price (&#8364;)</label><input id="i-pmin" type="number" step="0.01" min="0" placeholder="0.00"></div>
+        <div class="field-group"><label>Max Price (&#8364;)</label><input id="i-pmax" type="number" step="0.01" min="0" placeholder="0.00"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('item-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- CURRENCY MODAL -->
+<div class="modal-overlay" id="currency-modal">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <h3 id="currency-modal-title">Add Currency</h3>
+      <button class="modal-close" onclick="closeModal('currency-modal')">&#215;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-row">
+        <div class="field-group"><label>Code</label><input id="c-code" placeholder="e.g. EUR" style="text-transform:uppercase" maxlength="5"></div>
+        <div class="field-group"><label>Symbol</label><input id="c-symbol" placeholder="e.g. &#8364;" maxlength="5"></div>
+      </div>
+      <div class="field-group"><label>Name</label><input id="c-name" placeholder="e.g. Euro"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('currency-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCurrency()">Save Currency</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-panel" id="settings-panel">
+  <h3>&#9881; Settings</h3>
+  <div class="field-group">
+    <label>GitHub Personal Access Token</label>
+    <input type="password" id="gh-token" placeholder="ghp_..." oninput="localStorage.setItem('lib_gh_token',this.value)">
+    <div class="hint">Needs <code>repo</code> scope. Used to save changes back to GitHub. Stored locally only.</div>
+  </div>
+  <div class="field-group">
+    <label>GitHub Owner</label>
+    <input id="gh-owner" value="malliach-wq" oninput="localStorage.setItem('lib_gh_owner',this.value)">
+  </div>
+  <div class="field-group">
+    <label>GitHub Repo</label>
+    <input id="gh-repo" value="my-library" oninput="localStorage.setItem('lib_gh_repo',this.value)">
+  </div>
+  <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="syncFromGitHub()">&#8635; Sync Now</button>
+  <hr style="margin:16px 0;border:none;border-top:1px solid var(--border)">
+  <button class="btn btn-ghost" style="width:100%;margin-bottom:8px" onclick="exportJSON()">&#8595; Export All as JSON</button>
+  <label class="btn btn-ghost" style="width:100%;display:block;text-align:center;cursor:pointer">
+    &#8593; Import JSON
+    <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
+  </label>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────────────────
+const GH_OWNER = () => localStorage.getItem('lib_gh_owner') || 'malliach-wq';
+const GH_REPO  = () => localStorage.getItem('lib_gh_repo')  || 'my-library';
+const GH_TOKEN = () => localStorage.getItem('lib_gh_token') || '';
+const RAW_BASE = () => `https://raw.githubusercontent.com/${GH_OWNER()}/${GH_REPO()}/main/data/`;
+const API_BASE = () => `https://api.github.com/repos/${GH_OWNER()}/${GH_REPO()}/contents/data/`;
+
+const DEFAULT_CURRENCIES = [
+  {code:'EUR',symbol:'€',name:'Euro'},
+  {code:'USD',symbol:'$',name:'US Dollar'},
+  {code:'GBP',symbol:'£',name:'British Pound'},
+  {code:'CHF',symbol:'CHF',name:'Swiss Franc'},
+  {code:'AED',symbol:'AED',name:'UAE Dirham'},
+  {code:'JPY',symbol:'¥',name:'Japanese Yen'},
+  {code:'CAD',symbol:'CA$',name:'Canadian Dollar'},
+  {code:'AUD',symbol:'A$',name:'Australian Dollar'},
+  {code:'SEK',symbol:'kr',name:'Swedish Krona'},
+  {code:'NOK',symbol:'kr',name:'Norwegian Krone'},
+  {code:'DKK',symbol:'kr',name:'Danish Krone'},
+  {code:'PLN',symbol:'zł',name:'Polish Złoty'},
+  {code:'CZK',symbol:'Kč',name:'Czech Koruna'},
+  {code:'HUF',symbol:'Ft',name:'Hungarian Forint'},
+  {code:'RON',symbol:'lei',name:'Romanian Leu'�)t�((����R�R �Mхє��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )��Ё�����(���ѽɕ��)M=8����͔������MѽɅ������%ѕ������}�ѽɕ̜������mt���(���ѕ��老)M=8����͔������MѽɅ������%ѕ������}�ѕ�̜�������mt���(�����ɕ������)M=8����͔������MѽɅ������%ѕ������}���ɕ����̜�����)M=8���ɥ�����U1Q}
+UII9
+%L��)��)��Ё͡�̀����)��Ё����%�����ѽɕ��ձ����ѕ���ձ������ɕ������ձ���)��Ё��ѥٕQ�����ѽɕ̜�((����R�R �%��Ѓ�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )ݥ���ܹ�������􀠤�����(�����յ��й���������	�%������ѽ������م�Ք��!}Q=-8���(�����յ��й���������	�%�������ݹ�Ȝ��م�Ք��!}=]9H���(�����յ��й���������	�%������ɕ�����م�Ք���!}IA<���(��ɕ���������(���幍ɽ���!Ո���)��((����R�R �Q��̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ����ݥэ�Q���х����(����ѥٕQ����х��(�����յ��й�Օ��M����ѽ������х�����������Ѐ���й�����1��йɕ��ٔ����ѥٔ����(���ٕ�йхɝ�й���͕�Р��х���������1��й�������ѥٔ���(��l��ѽɕ̜���ѕ�̜�����ɕ����̝t��������؀����(�������յ��й���������	�%���٥�ܴ��ؤ���屔�������������х���������蝹�����(�����)�((����R�R �M幌��ɽ����!Ո��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )��幌��չ�ѥ����幍ɽ���!Ո����(��͕�M幍Mх��̠�M幍��������(����Ё���1������􁙅�͔�(����Ȁ�����Ё��䁽��l��ѽɕ̜���ѕ�̜�����ɕ����̝t���(��������(����������Ёɕ̀�݅�Ё��э��I]}	M�������䀬����ͽ���������є���ܠ���(����������ɕ̹�����(������������Ё��ф��݅�Ёɕ̹�ͽ����(�������������Ʌ乥��Ʌ䡑�ф���쁑�m���t�􁑅ф쁅��1���������Ք��(�������(����������э��M!���ȁ�ɥѕ�(����������!}Q=-8�����(������������Ё���I�̀�݅�Ё��э��A%}	M�������䀬����ͽ�����(��������������������ѡ�ɥ�ѥ���ѽ������!}Q=-8���������蝅������ѥ���ٹ����ѡՈ��̭�ͽ���(�����������(���������������I�̹����쁍���Ё���݅�Ё���I�̹�ͽ����͡��m���t�􁨹͡���(�������(����􁍅э�������(���(���������1��������(����ٕͅ1�������(����ɕ���������(����͕�M幍Mх��̠�M幍���������܁�є���ѽ1�����Q���M�ɥ������(��􁕱͔��(����͕�M幍Mх��̠�Uͥ�����������ф���(���)�((����R�R �M�ٔ�Ѽ���!Ո��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )��幌��չ�ѥ�����͡Q���!Ո���䤁�(������Ёѽ�����!}Q=-8���(�������ѽ�����쁙��͠���ѕȁ����!Ո�ѽ�������M��ѥ��́Ѽ�ٔͅ�������́������������ɽȜ��ɕ��ɸ��(������Ё���ѕ�Ѐ�ѽ��չ�͍����������UI%
+�������С)M=8���ɥ����䡑�m���t���ձ���Ȥ����(������Ё���������ͅ���U���є���������ͽ�������ѕ�а�����͡��m���t��͡��͡��m���u�������(������(��������Ёɕ̀�݅�Ё��э��A%}	M�������䀬����ͽ�����(��������ѡ���AUP��(����������������ѡ�ɥ�ѥ���ѽ������ѽ������
+��ѕ�еQ����蝅������ѥ����ͽ���������蝅������ѥ���ٹ����ѡՈ��̭�ͽ����(�����������)M=8���ɥ����䡉���(�������(��������ɕ̹�����(����������Ё���݅�Ёɕ̹�ͽ����(������͡��m���t�􁨹���ѕ�й͡��(������͕�M幍Mх��̠�M�ٕ��������܁�є���ѽ1�����Q���M�ɥ������(����􁕱͔��(����������Ё��Ȁ�݅�Ёɕ̹�ͽ����(���������͠����!Ո�ٔͅ�������耜������ȹ���ͅ����ɕ̹�х��̤�����ɽȜ��(�����(��􁍅э�����쁙��͠��9��ݽɬ���ɽ�耜������ͅ������ɽȜ���)�()�չ�ѥ���ٕͅ1��������(�������MѽɅ���͕�%ѕ������}�ѽɕ̜��)M=8���ɥ����䡑���ѽɕ̤��(�������MѽɅ���͕�%ѕ������}�ѕ�̜���)M=8���ɥ����䡑���ѕ�̤��(�������MѽɅ���͕�%ѕ������}���ɕ����̜��)M=8���ɥ����䡑�����ɕ����̤��)�((����R�R �I����ȃ�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���ɕ����������ɕ����Mѽɕ̠��ɕ����%ѕ�̠��ɕ����
+��ɕ����̠���()�չ�ѥ���ɕ����Mѽɕ̠���(������ЁĀ􀡑��յ��й���������	�%���͕�ɍ���ѽɕ̜���م�Օ�𜜤�ѽ1�ݕ�
+�͔���(������Ёɽ�̀􁑈��ѽɕ̹���ѕȡ̀��(�����ā����̹�ɥ�����9����̹�����̹����̹��չ���̹��ѕ���䤹ѽ1�ݕ�
+�͔�������Ց�̡Ĥ(����(�����յ��й���������	�%�����е�ѽɕ̜��ѕ��
+��ѕ�Ѐ􁑈��ѽɕ̹����Ѡ�(������Ёщ���􁑽�յ��й���������	�%����ѽɕ̵���䜤�(�������ɽ�̹����Ѡ���щ��乥����!Q50�������ѐ�������������؁�����􉕵����хє�����9���ѽɕ́������������ѽɕ́���Յ��䁽ȁѡ��p������������ѕ���ɽ����ȁɕ�����̸���𽑥���ѐ�������ɕ��ɸ��(��щ��乥����!Q50��ɽ�̹����̀����(��������(�������ѐ����ɽ�����͌�̹�ɥ�����9�����̹���������ɽ����ѐ�(�������ѐ���͌�̹�������ѐ�(�������ѐ���͌�̹�����𜜥��ѐ�(�������ѐ���͌�̹��չ����𜜥��ѐ�(�������ѐ���̹��ѕ������������������х�����͌�̹��ѕ������������蜝��ѐ�(�������ѐ���屔􉙽�еͥ����ɕ�퍽����مȠ��ѕ�е��ѕ������͌�̹م�9յ����𜜥��ѐ�(�������ѐ���̹����͕���mt����������������������х�����͌�����������������������ѐ�(�������ѐ���屔�ݡ�є������鹽�Ʌ���(�����������ѽ��������Ѹ��Ѹ�����Ё�Ѹ�ʹ�������������Mѽɕ5��������̹�������������ѽ��(�����������ѽ��������Ѹ��Ѹ������ȁ�Ѹ�ʹ���������􉑕��ѕ���䠝�ѽɕ̜����̹����������������ѽ��(�������ѐ�(��������������������)�()�չ�ѥ���ɕ����%ѕ�̠���(������ЁĀ􀡑��յ��й���������	�%���͕�ɍ���ѕ�̜���م�Օ�𜜤�ѽ1�ݕ�
+�͔���(������Ёɽ�̀􁑈��ѕ�̹���ѕȡ����(�����ā������������������͕���mt����������������ѕ���䤹ѽ1�ݕ�
+�͔�������Ց�̡Ĥ(����(�����յ��й���������	�%�����е�ѕ�̜��ѕ��
+��ѕ�Ѐ􁑈��ѕ�̹����Ѡ�(������Ёщ���􁑽�յ��й���������	�%����ѕ�̵���䜤�(�������ɽ�̹����Ѡ���щ��乥����!Q50�������ѐ���������؈��؁�����􉕵����хє�����9���ѕ�́��������%ѕ�́ݥ�������՝���ѕ���ɽ����ȁɕ�����́����͡�����������̸���𽑥���ѐ�������ɕ��ɸ��(��щ��乥����!Q50��ɽ�̹����������(��������(�������ѐ����ɽ�����͌������������ɽ����ѐ�(�������ѐ��졤�����͕���mt����������������������х�����͌�����������������������ѐ�(�������ѐ�������ѕ������������������х�����͌�����ѕ������������蜝��ѐ�(�������ѐ���͌����������U����𜜥��ѐ�(�������ѐ���屔􉙽�еͥ����ɕ��������ɥ��5�����ɥ��5���������ɥ��5�����������L�������ɥ��5��������耜���ѐ�(�������ѐ���屔�ݡ�є������鹽�Ʌ���(�����������ѽ��������Ѹ��Ѹ�����Ё�Ѹ�ʹ�������������%ѕ�5�����������������������ѽ��(�����������ѽ��������Ѹ��Ѹ������ȁ�Ѹ�ʹ���������􉑕��ѕ���䠝�ѕ�̜����������������������ѽ��(�������ѐ�(��������������������)�()�չ�ѥ���ɕ����
+��ɕ����̠���(������ЁĀ􀡑��յ��й���������	�%���͕�ɍ�����ɕ����̜���م�Օ�𜜤�ѽ1�ݕ�
+�͔���(������Ёɽ�̀􁑈����ɕ����̹���ѕȡ����(�����ā��������������嵉�����������ѽ1�ݕ�
+�͔�������Ց�̡Ĥ(����(�����յ��й���������	�%�����е���ɕ����̜��ѕ��
+��ѕ�Ѐ􁑈����ɕ����̹����Ѡ�(������Ёщ���􁑽�յ��й���������	�%������ɕ����̵���䜤�(��щ��乥����!Q50��ɽ�̹����������(��������(�������ѐ����ɽ�����͌������������ɽ����ѐ�(�������ѐ���屔􉙽�еͥ��ĸ�ɕ�����͌����嵉�����ѐ�(�������ѐ���͌����������ѐ�(�������ѐ���屔�ݡ�є������鹽�Ʌ���(�����������ѽ��������Ѹ��Ѹ�����Ё�Ѹ�ʹ�������������
+��ɕ���5�������팹���������������ѽ��(�����������ѽ��������Ѹ��Ѹ������ȁ�Ѹ�ʹ���������􉑕��ѕ���䠝���ɕ����̜���팹�������������������������ѽ��(�������ѐ�(��������������������)�((����R�R �Mѽɔ�
+IU��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������Mѽɕ5����������(������%���ѽɕ̀􁥐�����ձ��(�����յ��й���������	�%����ѽɔ�������ѥѱ����ѕ��
+��ѕ�Ѐ􁥐������ЁMѽɔ��耝���Mѽɔ��(������Ё̀􁥐�������ѽɕ̹��������๥������������(��l��ɥ����䜰�����������ɕ�̜�����䜰���չ��䜰�مМ������͕̝t��������������(��������Ё���􁑽�յ��й���������	�%���̴�����(���������������م�Ք����������͕̜�����������͕���mt�������������耡���m�����5�����u�𜜤�(�����(�����յ��й���������	�%���̵��ѕ���䜤�م�Ք�������ѕ�������(�����յ��й���������	�%����ѽɔ��������������1��й������������)�)����Ё�����5���􁘀�����ɥ�����蝙ɥ�����9���������蝹��������ɕ��蝅��ɕ�̜�����蝍��䜱��չ���蝍�չ��䜱م��م�9յ��Ȝ�����͕�蝅���͕̝�m�u���()�չ�ѥ���ٕͅMѽɔ����(������Ё��Ѐ􁥐�������յ��й���������	�%������م�Ք��ɥ����(������Ё̀��(������聕���%���ѽɕ́���ե����(�����ɥ�����9���聝�Р�̵�ɥ����䜤�(��������聝�Р�̵�������(�������ɕ��聝�Р�̵���ɕ�̜��(��������聝�Р�̵���䜤�(������չ���聝�Р�̵��չ��䜤�(������ѕ����聝�Р�̵��ѕ���䜤�(����م�9յ���聝�Р�̵مМ��(��������͕�聝�Р�̵����͕̜������Р���������������ɥ��������ѕȡ	��������(��������ѕ��聹�܁�є���ѽ%M=M�ɥ����(����(�������̹���������̹�ɥ�����9�����쁙��͠���ѕȁ�Ё����Ё������������ɽȜ��ɕ��ɸ��(����������%���ѽɕ̤�쁍���Ё��������ѽɕ̹����%�������๥��������%���ѽɕ̤쁑���ѽɕ�m���t����(����͔��̹�ɕ�ѕ���̹����ѕ��쁑���ѽɕ̹��͠�̤��(��ٕͅ1�������ɕ����Mѽɕ̠�쁍��͕5�������ѽɔ���������(����͡Q���!Ո���ѽɕ̜�쁙��͠��Mѽɔ�ٕͅ������Ս���̜��)�((����R�R �%ѕ��
+IU��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������%ѕ�5����������(������%���ѕ�̀􁥐�����ձ��(�����յ��й���������	�%����ѕ��������ѥѱ����ѕ��
+��ѕ�Ѐ􁥐������Ё%ѕ���耝���%ѕ���(������Ё��􁥐�������ѕ�̹��������๥������������(�����յ��й���������	�%������������م�Ք�����������(�����յ��й���������	�%���������͕̜��م�Ք�􀡤������͕���mt�������������(�����յ��й���������	�%�������ѕ���䜤�م�Ք������ѕ�������(�����յ��й���������	�%�����չ�М��م�Ք�����������U������(�����յ��й���������	�%������������م�Ք�����ɥ��5�����(�����յ��й���������	�%������������م�Ք�����ɥ��5�����(�����յ��й���������	�%����ѕ���������������1��й������������)�()�չ�ѥ���ٕͅ%ѕ�����(������Ё��Ѐ􁥐�������յ��й���������	�%������م�Ք��ɥ����(������Ё�ѕ����(������聕���%���ѕ�́���ե����(��������聝�Р����������(��������͕�聝�Р�������͕̜������Р���������������ɥ��������ѕȡ	��������(������ѕ����聝�Р�����ѕ���䜤�(�����������U���聝�Р���չ�М��(�����ɥ��5������͕���С��Р������������ձ��(�����ɥ��5������͕���С��Р������������ձ��(��������ѕ��聹�܁�є���ѽ%M=M�ɥ����(����(��������ѕ��������쁙��͠���ѕȁ����ѕ������������ɽȜ��ɕ��ɸ��(����������%���ѕ�̤�쁍���Ё��������ѕ�̹����%�������๥��������%���ѕ�̤쁑���ѕ��m���t��ѕ���(����͔�쁥ѕ���ɕ�ѕ����ѕ������ѕ��쁑���ѕ�̹��͠��ѕ����(��ٕͅ1�������ɕ����%ѕ�̠�쁍��͕5�������ѕ����������(����͡Q���!Ո���ѕ�̜�쁙��͠��%ѕ��ٕͅ������Ս���̜��)�((����R�R �
+��ɕ���
+IU��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������
+��ɕ���5������������(������%�����ɕ����̀􁍽�������ձ��(�����յ��й���������	�%������ɕ��䵵�����ѥѱ����ѕ��
+��ѕ�Ѐ􁍽��������Ё
+��ɕ��䜀耝���
+��ɕ����(������Ё��􁍽�����������ɕ����̹��������ํ����������������(�����յ��й���������	�%������������م�Ք�����������(�����յ��й���������	�%������嵉�����م�Ք�����嵉�����(�����յ��й���������	�%������������م�Ք�����������(�����յ��й���������	�%��������������ͅ�����􀄅�����(�����յ��й���������	�%������ɕ��䵵������������1��й������������)�()�չ�ѥ���ٕͅ
+��ɕ��䠤��(������Ё�����􁑽�յ��й���������	�%������������م�Ք��ɥ����ѽU����
+�͔���(������Ё���쁍������嵉��聑��յ��й���������	�%������嵉�����م�Ք��ɥ���������聑��յ��й���������	�%������������م�Ք��ɥ������(�������������������嵉����쁙��͠��
+���������嵉����ɔ�ɕ�եɕ�������ɽȜ��ɕ��ɸ��(����������%�����ɕ����̤�쁍���Ё����������ɕ����̹����%�������ํ����������%�����ɕ����̤쁑�����ɕ�����m���t����(����͔��(��������������ɕ����̹��������ํ�������������쁙��͠��
+��ɕ��䀜����������ɕ��䁕���̸�����ɽȜ��ɕ��ɸ��(����������ɕ����̹��͠����(���(��ٕͅ1�������ɕ����
+��ɕ����̠�쁍��͕5���������ɕ��䵵�������(����͡Q���!Ո�����ɕ����̜�쁙��͠��
+��ɕ���ٕͅ������Ս���̜��)�((����R�R ����є��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������ѕ���䡭�䰁�����������������(������������ɴ�����є�ѡ�́����������ɕ��ɸ�(����m���t�􁑉m���t����ѕȡ������m�����t���􁥐��(��ٕͅ1�������ɕ���������(����͡Q���!Ո����쁙��͠�����ѕ������Ս���̜��)�((����R�R �5�����������̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ������͕5���������쁑��յ��й���������	�%�����������1��йɕ��ٔ����������)���յ��й���ٕ��1��ѕ��Ƞ���命ݸ��������쁥�����������͍���������յ��й�Օ��M����ѽ�������������ٕɱ�乽�����������������������1��йɕ��ٔ�������������)���յ��й�Օ��M����ѽ�������������ٕɱ�䜤������������������ٕ��1��ѕ��Ƞ��������������쁥����хɝ���������������1��йɕ��ٔ�������������((����R�R �M��ѥ��̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���ѽ����M��ѥ��̠��쁑��յ��й���������	�%���͕�ѥ��̵�������������1��йѽ��������������((����R�R �����Ѐ��%����Ѓ�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���������)M=8����(������Ё�����􁹕܁	����m)M=8���ɥ����䡑����ձ���ȥt�������蝅������ѥ����ͽ�����(������Ё��􁑽�յ��й�ɕ�ѕ�����Р����쁄��ɕ��UI0��ɕ�ѕ=�����UI0������쁄���ݹ�������䵱��Ʌ�乩ͽ��쁄���������)�)�չ�ѥ���������)M=8�����(������Ё�����􁔹хɝ�й�����l�t쁥���������ɕ��ɸ�(������Ёɕ���Ȁ􁹕܁���I����Ƞ��(��ɕ���ȹ��������؀����(��������(����������Ё��ф��)M=8����͔��عхɝ�йɕ�ձФ�(�����������ф��ѽɕ̤�����ѽɕ̀􁑅ф��ѽɕ��(�����������ф��ѕ�̤������ѕ�̀�􁑅ф��ѕ���(�����������ф����ɕ����̤�������ɕ����̀􁑅ф����ɕ������(������ٕͅ1�������ɕ���������(���������͠��%����ѕ���Ս���͙ձ�䄜���Ս���̜��(����􁍅э���ँ쁙��͠��%�م����)M=8�����������ɽȜ���(����(��ɕ���ȹɕ���Q��С������)�((����R�R �!�����̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���ե�����ɕ��ɸ��є���ܠ��ѽM�ɥ����ؤ���5�Ѡ�Ʌ�������ѽM�ɥ����ؤ�ͱ����Ȱؤ��)�չ�ѥ����͌�̤��ɕ��ɸ�M�ɥ�����𜜤�ɕ����������������윤�ɕ�������𽜰����윤�ɕ���������������윤�ɕ��������������ս�윤��)�չ�ѥ���͕�M幍Mх��̡�͜��쁑��յ��й���������	�%����幌��х��̜��ѕ��
+��ѕ�Ѐ�͜��)�չ�ѥ������͠��͜���������(������Ё���􁑽�յ��й���������	�%������͠���(�����ѕ��
+��ѕ�Ѐ�͜쁕�������9����􀝙��͠����������͡�ܜ�(��͕�Q�����Р��������������1��йɕ��ٔ��͡�ܜ���������)�(�͍ɥ���(𽉽���(�ѵ��
