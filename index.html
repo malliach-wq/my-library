@@ -44,7 +44,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .data-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:.84rem;vertical-align:middle;}
 .data-table tr:last-child td{border-bottom:none;}
 .data-table tr:hover td{background:#faf7fc;}
-.tag{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:.7rem;padding:2px 7px;border-radius:10px;margin:1px;}
+.tag{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:.trem;padding:2px 7px;border-radius:10px;margin:1px;}
 .empty-state{text-align:center;padding:48px 24px;color:var(--text-muted);}
 .empty-state h3{margin-bottom:8px;font-size:1.1rem;}
 
@@ -292,38 +292,303 @@ const DEFAULT_CURRENCIES = [
   {code:'PLN',symbol:'zł',name:'Polish Złoty'},
   {code:'CZK',symbol:'Kč',name:'Czech Koruna'},
   {code:'HUF',symbol:'Ft',name:'Hungarian Forint'},
-  {code:'RON',symbol:'lei',name:'Romanian Leu'�)t�((����R�R �Mхє��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )��Ё�����(���ѽɕ��)M=8����͔������MѽɅ������%ѕ������}�ѽɕ̜������mt���(���ѕ��老)M=8����͔������MѽɅ������%ѕ������}�ѕ�̜�������mt���(�����ɕ������)M=8����͔������MѽɅ������%ѕ������}���ɕ����̜�����)M=8���ɥ�����U1Q}
-UII9
-%L��)��)��Ё͡�̀����)��Ё����%�����ѽɕ��ձ����ѕ���ձ������ɕ������ձ���)��Ё��ѥٕQ�����ѽɕ̜�((����R�R �%��Ѓ�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )ݥ���ܹ�������􀠤�����(�����յ��й���������	�%������ѽ������م�Ք��!}Q=-8���(�����յ��й���������	�%�������ݹ�Ȝ��م�Ք��!}=]9H���(�����յ��й���������	�%������ɕ�����م�Ք���!}IA<���(��ɕ���������(���幍ɽ���!Ո���)��((����R�R �Q��̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ����ݥэ�Q���х����(����ѥٕQ����х��(�����յ��й�Օ��M����ѽ������х�����������Ѐ���й�����1��йɕ��ٔ����ѥٔ����(���ٕ�йхɝ�й���͕�Р��х���������1��й�������ѥٔ���(��l��ѽɕ̜���ѕ�̜�����ɕ����̝t��������؀����(�������յ��й���������	�%���٥�ܴ��ؤ���屔�������������х���������蝹�����(�����)�((����R�R �M幌��ɽ����!Ո��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )��幌��չ�ѥ����幍ɽ���!Ո����(��͕�M幍Mх��̠�M幍��������(����Ё���1������􁙅�͔�(����Ȁ�����Ё��䁽��l��ѽɕ̜���ѕ�̜�����ɕ����̝t���(��������(����������Ёɕ̀�݅�Ё��э��I]}	M�������䀬����ͽ���������є���ܠ���(����������ɕ̹�����(������������Ё��ф��݅�Ёɕ̹�ͽ����(�������������Ʌ乥��Ʌ䡑�ф���쁑�m���t�􁑅ф쁅��1���������Ք��(�������(����������э��M!���ȁ�ɥѕ�(����������!}Q=-8�����(������������Ё���I�̀�݅�Ё��э��A%}	M�������䀬����ͽ�����(��������������������ѡ�ɥ�ѥ���ѽ������!}Q=-8���������蝅������ѥ���ٹ����ѡՈ��̭�ͽ���(�����������(���������������I�̹����쁍���Ё���݅�Ё���I�̹�ͽ����͡��m���t�􁨹͡���(�������(����􁍅э�������(���(���������1��������(����ٕͅ1�������(����ɕ���������(����͕�M幍Mх��̠�M幍���������܁�є���ѽ1�����Q���M�ɥ������(��􁕱͔��(����͕�M幍Mх��̠�Uͥ�����������ф���(���)�((����R�R �M�ٔ�Ѽ���!Ո��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )��幌��չ�ѥ�����͡Q���!Ո���䤁�(������Ёѽ�����!}Q=-8���(�������ѽ�����쁙��͠���ѕȁ����!Ո�ѽ�������M��ѥ��́Ѽ�ٔͅ�������́������������ɽȜ��ɕ��ɸ��(������Ё���ѕ�Ѐ�ѽ��չ�͍����������UI%
-�������С)M=8���ɥ����䡑�m���t���ձ���Ȥ����(������Ё���������ͅ���U���є���������ͽ�������ѕ�а�����͡��m���t��͡��͡��m���u�������(������(��������Ёɕ̀�݅�Ё��э��A%}	M�������䀬����ͽ�����(��������ѡ���AUP��(����������������ѡ�ɥ�ѥ���ѽ������ѽ������
-��ѕ�еQ����蝅������ѥ����ͽ���������蝅������ѥ���ٹ����ѡՈ��̭�ͽ����(�����������)M=8���ɥ����䡉���(�������(��������ɕ̹�����(����������Ё���݅�Ёɕ̹�ͽ����(������͡��m���t�􁨹���ѕ�й͡��(������͕�M幍Mх��̠�M�ٕ��������܁�є���ѽ1�����Q���M�ɥ������(����􁕱͔��(����������Ё��Ȁ�݅�Ёɕ̹�ͽ����(���������͠����!Ո�ٔͅ�������耜������ȹ���ͅ����ɕ̹�х��̤�����ɽȜ��(�����(��􁍅э�����쁙��͠��9��ݽɬ���ɽ�耜������ͅ������ɽȜ���)�()�չ�ѥ���ٕͅ1��������(�������MѽɅ���͕�%ѕ������}�ѽɕ̜��)M=8���ɥ����䡑���ѽɕ̤��(�������MѽɅ���͕�%ѕ������}�ѕ�̜���)M=8���ɥ����䡑���ѕ�̤��(�������MѽɅ���͕�%ѕ������}���ɕ����̜��)M=8���ɥ����䡑�����ɕ����̤��)�((����R�R �I����ȃ�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���ɕ����������ɕ����Mѽɕ̠��ɕ����%ѕ�̠��ɕ����
-��ɕ����̠���()�չ�ѥ���ɕ����Mѽɕ̠���(������ЁĀ􀡑��յ��й���������	�%���͕�ɍ���ѽɕ̜���م�Օ�𜜤�ѽ1�ݕ�
-�͔���(������Ёɽ�̀􁑈��ѽɕ̹���ѕȡ̀��(�����ā����̹�ɥ�����9����̹�����̹����̹��չ���̹��ѕ���䤹ѽ1�ݕ�
-�͔�������Ց�̡Ĥ(����(�����յ��й���������	�%�����е�ѽɕ̜��ѕ��
-��ѕ�Ѐ􁑈��ѽɕ̹����Ѡ�(������Ёщ���􁑽�յ��й���������	�%����ѽɕ̵���䜤�(�������ɽ�̹����Ѡ���щ��乥����!Q50�������ѐ�������������؁�����􉕵����хє�����9���ѽɕ́������������ѽɕ́���Յ��䁽ȁѡ��p������������ѕ���ɽ����ȁɕ�����̸���𽑥���ѐ�������ɕ��ɸ��(��щ��乥����!Q50��ɽ�̹����̀����(��������(�������ѐ����ɽ�����͌�̹�ɥ�����9�����̹���������ɽ����ѐ�(�������ѐ���͌�̹�������ѐ�(�������ѐ���͌�̹�����𜜥��ѐ�(�������ѐ���͌�̹��չ����𜜥��ѐ�(�������ѐ���̹��ѕ������������������х�����͌�̹��ѕ������������蜝��ѐ�(�������ѐ���屔􉙽�еͥ����ɕ�퍽����مȠ��ѕ�е��ѕ������͌�̹م�9յ����𜜥��ѐ�(�������ѐ���̹����͕���mt����������������������х�����͌�����������������������ѐ�(�������ѐ���屔�ݡ�є������鹽�Ʌ���(�����������ѽ��������Ѹ��Ѹ�����Ё�Ѹ�ʹ�������������Mѽɕ5��������̹�������������ѽ��(�����������ѽ��������Ѹ��Ѹ������ȁ�Ѹ�ʹ���������􉑕��ѕ���䠝�ѽɕ̜����̹����������������ѽ��(�������ѐ�(��������������������)�()�չ�ѥ���ɕ����%ѕ�̠���(������ЁĀ􀡑��յ��й���������	�%���͕�ɍ���ѕ�̜���م�Օ�𜜤�ѽ1�ݕ�
-�͔���(������Ёɽ�̀􁑈��ѕ�̹���ѕȡ����(�����ā������������������͕���mt����������������ѕ���䤹ѽ1�ݕ�
-�͔�������Ց�̡Ĥ(����(�����յ��й���������	�%�����е�ѕ�̜��ѕ��
-��ѕ�Ѐ􁑈��ѕ�̹����Ѡ�(������Ёщ���􁑽�յ��й���������	�%����ѕ�̵���䜤�(�������ɽ�̹����Ѡ���щ��乥����!Q50�������ѐ���������؈��؁�����􉕵����хє�����9���ѕ�́��������%ѕ�́ݥ�������՝���ѕ���ɽ����ȁɕ�����́����͡�����������̸���𽑥���ѐ�������ɕ��ɸ��(��щ��乥����!Q50��ɽ�̹����������(��������(�������ѐ����ɽ�����͌������������ɽ����ѐ�(�������ѐ��졤�����͕���mt����������������������х�����͌�����������������������ѐ�(�������ѐ�������ѕ������������������х�����͌�����ѕ������������蜝��ѐ�(�������ѐ���͌����������U����𜜥��ѐ�(�������ѐ���屔􉙽�еͥ����ɕ��������ɥ��5�����ɥ��5���������ɥ��5�����������L�������ɥ��5��������耜���ѐ�(�������ѐ���屔�ݡ�є������鹽�Ʌ���(�����������ѽ��������Ѹ��Ѹ�����Ё�Ѹ�ʹ�������������%ѕ�5�����������������������ѽ��(�����������ѽ��������Ѹ��Ѹ������ȁ�Ѹ�ʹ���������􉑕��ѕ���䠝�ѕ�̜����������������������ѽ��(�������ѐ�(��������������������)�()�չ�ѥ���ɕ����
-��ɕ����̠���(������ЁĀ􀡑��յ��й���������	�%���͕�ɍ�����ɕ����̜���م�Օ�𜜤�ѽ1�ݕ�
-�͔���(������Ёɽ�̀􁑈����ɕ����̹���ѕȡ����(�����ā��������������嵉�����������ѽ1�ݕ�
-�͔�������Ց�̡Ĥ(����(�����յ��й���������	�%�����е���ɕ����̜��ѕ��
-��ѕ�Ѐ􁑈����ɕ����̹����Ѡ�(������Ёщ���􁑽�յ��й���������	�%������ɕ����̵���䜤�(��щ��乥����!Q50��ɽ�̹����������(��������(�������ѐ����ɽ�����͌������������ɽ����ѐ�(�������ѐ���屔􉙽�еͥ��ĸ�ɕ�����͌����嵉�����ѐ�(�������ѐ���͌����������ѐ�(�������ѐ���屔�ݡ�є������鹽�Ʌ���(�����������ѽ��������Ѹ��Ѹ�����Ё�Ѹ�ʹ�������������
-��ɕ���5�������팹���������������ѽ��(�����������ѽ��������Ѹ��Ѹ������ȁ�Ѹ�ʹ���������􉑕��ѕ���䠝���ɕ����̜���팹�������������������������ѽ��(�������ѐ�(��������������������)�((����R�R �Mѽɔ�
-IU��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������Mѽɕ5����������(������%���ѽɕ̀􁥐�����ձ��(�����յ��й���������	�%����ѽɔ�������ѥѱ����ѕ��
-��ѕ�Ѐ􁥐������ЁMѽɔ��耝���Mѽɔ��(������Ё̀􁥐�������ѽɕ̹��������๥������������(��l��ɥ����䜰�����������ɕ�̜�����䜰���չ��䜰�مМ������͕̝t��������������(��������Ё���􁑽�յ��й���������	�%���̴�����(���������������م�Ք����������͕̜�����������͕���mt�������������耡���m�����5�����u�𜜤�(�����(�����յ��й���������	�%���̵��ѕ���䜤�م�Ք�������ѕ�������(�����յ��й���������	�%����ѽɔ��������������1��й������������)�)����Ё�����5���􁘀�����ɥ�����蝙ɥ�����9���������蝹��������ɕ��蝅��ɕ�̜�����蝍��䜱��չ���蝍�չ��䜱م��م�9յ��Ȝ�����͕�蝅���͕̝�m�u���()�չ�ѥ���ٕͅMѽɔ����(������Ё��Ѐ􁥐�������յ��й���������	�%������م�Ք��ɥ����(������Ё̀��(������聕���%���ѽɕ́���ե����(�����ɥ�����9���聝�Р�̵�ɥ����䜤�(��������聝�Р�̵�������(�������ɕ��聝�Р�̵���ɕ�̜��(��������聝�Р�̵���䜤�(������չ���聝�Р�̵��չ��䜤�(������ѕ����聝�Р�̵��ѕ���䜤�(����م�9յ���聝�Р�̵مМ��(��������͕�聝�Р�̵����͕̜������Р���������������ɥ��������ѕȡ	��������(��������ѕ��聹�܁�є���ѽ%M=M�ɥ����(����(�������̹���������̹�ɥ�����9�����쁙��͠���ѕȁ�Ё����Ё������������ɽȜ��ɕ��ɸ��(����������%���ѽɕ̤�쁍���Ё��������ѽɕ̹����%�������๥��������%���ѽɕ̤쁑���ѽɕ�m���t����(����͔��̹�ɕ�ѕ���̹����ѕ��쁑���ѽɕ̹��͠�̤��(��ٕͅ1�������ɕ����Mѽɕ̠�쁍��͕5�������ѽɔ���������(����͡Q���!Ո���ѽɕ̜�쁙��͠��Mѽɔ�ٕͅ������Ս���̜��)�((����R�R �%ѕ��
-IU��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������%ѕ�5����������(������%���ѕ�̀􁥐�����ձ��(�����յ��й���������	�%����ѕ��������ѥѱ����ѕ��
-��ѕ�Ѐ􁥐������Ё%ѕ���耝���%ѕ���(������Ё��􁥐�������ѕ�̹��������๥������������(�����յ��й���������	�%������������م�Ք�����������(�����յ��й���������	�%���������͕̜��م�Ք�􀡤������͕���mt�������������(�����յ��й���������	�%�������ѕ���䜤�م�Ք������ѕ�������(�����յ��й���������	�%�����չ�М��م�Ք�����������U������(�����յ��й���������	�%������������م�Ք�����ɥ��5�����(�����յ��й���������	�%������������م�Ք�����ɥ��5�����(�����յ��й���������	�%����ѕ���������������1��й������������)�()�չ�ѥ���ٕͅ%ѕ�����(������Ё��Ѐ􁥐�������յ��й���������	�%������م�Ք��ɥ����(������Ё�ѕ����(������聕���%���ѕ�́���ե����(��������聝�Р����������(��������͕�聝�Р�������͕̜������Р���������������ɥ��������ѕȡ	��������(������ѕ����聝�Р�����ѕ���䜤�(�����������U���聝�Р���չ�М��(�����ɥ��5������͕���С��Р������������ձ��(�����ɥ��5������͕���С��Р������������ձ��(��������ѕ��聹�܁�є���ѽ%M=M�ɥ����(����(��������ѕ��������쁙��͠���ѕȁ����ѕ������������ɽȜ��ɕ��ɸ��(����������%���ѕ�̤�쁍���Ё��������ѕ�̹����%�������๥��������%���ѕ�̤쁑���ѕ��m���t��ѕ���(����͔�쁥ѕ���ɕ�ѕ����ѕ������ѕ��쁑���ѕ�̹��͠��ѕ����(��ٕͅ1�������ɕ����%ѕ�̠�쁍��͕5�������ѕ����������(����͡Q���!Ո���ѕ�̜�쁙��͠��%ѕ��ٕͅ������Ս���̜��)�((����R�R �
-��ɕ���
-IU��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������
-��ɕ���5������������(������%�����ɕ����̀􁍽�������ձ��(�����յ��й���������	�%������ɕ��䵵�����ѥѱ����ѕ��
-��ѕ�Ѐ􁍽��������Ё
-��ɕ��䜀耝���
-��ɕ����(������Ё��􁍽�����������ɕ����̹��������ํ����������������(�����յ��й���������	�%������������م�Ք�����������(�����յ��й���������	�%������嵉�����م�Ք�����嵉�����(�����յ��й���������	�%������������م�Ք�����������(�����յ��й���������	�%��������������ͅ�����􀄅�����(�����յ��й���������	�%������ɕ��䵵������������1��й������������)�()�չ�ѥ���ٕͅ
-��ɕ��䠤��(������Ё�����􁑽�յ��й���������	�%������������م�Ք��ɥ����ѽU����
-�͔���(������Ё���쁍������嵉��聑��յ��й���������	�%������嵉�����م�Ք��ɥ���������聑��յ��й���������	�%������������م�Ք��ɥ������(�������������������嵉����쁙��͠��
-���������嵉����ɔ�ɕ�եɕ�������ɽȜ��ɕ��ɸ��(����������%�����ɕ����̤�쁍���Ё����������ɕ����̹����%�������ํ����������%�����ɕ����̤쁑�����ɕ�����m���t����(����͔��(��������������ɕ����̹��������ํ�������������쁙��͠��
-��ɕ��䀜����������ɕ��䁕���̸�����ɽȜ��ɕ��ɸ��(����������ɕ����̹��͠����(���(��ٕͅ1�������ɕ����
-��ɕ����̠�쁍��͕5���������ɕ��䵵�������(����͡Q���!Ո�����ɕ����̜�쁙��͠��
-��ɕ���ٕͅ������Ս���̜��)�((����R�R ����є��R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ�������ѕ���䡭�䰁�����������������(������������ɴ�����є�ѡ�́����������ɕ��ɸ�(����m���t�􁑉m���t����ѕȡ������m�����t���􁥐��(��ٕͅ1�������ɕ���������(����͡Q���!Ո����쁙��͠�����ѕ������Ս���̜��)�((����R�R �5�����������̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ������͕5���������쁑��յ��й���������	�%�����������1��йɕ��ٔ����������)���յ��й���ٕ��1��ѕ��Ƞ���命ݸ��������쁥�����������͍���������յ��й�Օ��M����ѽ�������������ٕɱ�乽�����������������������1��йɕ��ٔ�������������)���յ��й�Օ��M����ѽ�������������ٕɱ�䜤������������������ٕ��1��ѕ��Ƞ��������������쁥����хɝ���������������1��йɕ��ٔ�������������((����R�R �M��ѥ��̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���ѽ����M��ѥ��̠��쁑��յ��й���������	�%���͕�ѥ��̵�������������1��йѽ��������������((����R�R �����Ѐ��%����Ѓ�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���������)M=8����(������Ё�����􁹕܁	����m)M=8���ɥ����䡑����ձ���ȥt�������蝅������ѥ����ͽ�����(������Ё��􁑽�յ��й�ɕ�ѕ�����Р����쁄��ɕ��UI0��ɕ�ѕ=�����UI0������쁄���ݹ�������䵱��Ʌ�乩ͽ��쁄���������)�)�չ�ѥ���������)M=8�����(������Ё�����􁔹хɝ�й�����l�t쁥���������ɕ��ɸ�(������Ёɕ���Ȁ􁹕܁���I����Ƞ��(��ɕ���ȹ��������؀����(��������(����������Ё��ф��)M=8����͔��عхɝ�йɕ�ձФ�(�����������ф��ѽɕ̤�����ѽɕ̀􁑅ф��ѽɕ��(�����������ф��ѕ�̤������ѕ�̀�􁑅ф��ѕ���(�����������ф����ɕ����̤�������ɕ����̀􁑅ф����ɕ������(������ٕͅ1�������ɕ���������(���������͠��%����ѕ���Ս���͙ձ�䄜���Ս���̜��(����􁍅э���ँ쁙��͠��%�م����)M=8�����������ɽȜ���(����(��ɕ���ȹɕ���Q��С������)�((����R�R �!�����̃�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R�R )�չ�ѥ���ե�����ɕ��ɸ��є���ܠ��ѽM�ɥ����ؤ���5�Ѡ�Ʌ�������ѽM�ɥ����ؤ�ͱ����Ȱؤ��)�չ�ѥ����͌�̤��ɕ��ɸ�M�ɥ�����𜜤�ɕ����������������윤�ɕ�������𽜰����윤�ɕ���������������윤�ɕ��������������ս�윤��)�չ�ѥ���͕�M幍Mх��̡�͜��쁑��յ��й���������	�%����幌��х��̜��ѕ��
-��ѕ�Ѐ�͜��)�չ�ѥ������͠��͜���������(������Ё���􁑽�յ��й���������	�%������͠���(�����ѕ��
-��ѕ�Ѐ�͜쁕�������9����􀝙��͠����������͡�ܜ�(��͕�Q�����Р��������������1��йɕ��ٔ��͡�ܜ���������)�(�͍ɥ���(𽉽���(�ѵ��
+  {code:'RON',symbol:'lei',name:'Romanian Leu'}
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let db = {
+  stores: JSON.parse(localStorage.getItem('lib_stores') || '[]'),
+  items:  JSON.parse(localStorage.getItem('lib_items')  || '[]'),
+  currencies: JSON.parse(localStorage.getItem('lib_currencies') || JSON.stringify(DEFAULT_CURRENCIES))
+};
+let shas = {};
+let editId = {stores:null, items:null, currencies:null};
+let activeTab = 'stores';
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+window.onload = () => {
+  document.getElementById('gh-token').value = GH_TOKEN();
+  document.getElementById('gh-owner').value = GH_OWNER();
+  document.getElementById('gh-repo').value  = GH_REPO();
+  renderAll();
+  syncFromGitHub();
+};
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.closest('.tab').classList.add('active');
+  ['stores','items','currencies'].forEach(v => {
+    document.getElementById('view-'+v).style.display = v===tab?'block':'none';
+  });
+}
+
+// ── Sync from GitHub ─────────────────────────────────────────────────────────
+async function syncFromGitHub() {
+  setSyncStatus('Syncing…');
+  let anyLoaded = false;
+  for (const key of ['stores','items','currencies']) {
+    try {
+      const res = await fetch(RAW_BASE() + key + '.json?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) { db[key] = data; anyLoaded = true; }
+      }
+      // Fetch SHA for writes
+      if (GH_TOKEN()) {
+        const apiRes = await fetch(API_BASE() + key + '.json', {
+          headers: {Authorization:'token '+GH_TOKEN(), Accept:'application/vnd.github.v3+json'}
+        });
+        if (apiRes.ok) { const j = await apiRes.json(); shas[key] = j.sha; }
+      }
+    } catch(e) {}
+  }
+  if (anyLoaded) {
+    saveLocal();
+    renderAll();
+    setSyncStatus('Synced ' + new Date().toLocaleTimeString());
+  } else {
+    setSyncStatus('Using local data');
+  }
+}
+
+// ── Save to GitHub ────────────────────────────────────────────────────────────
+async function pushToGitHub(key) {
+  const token = GH_TOKEN();
+  if (!token) { flash('Enter a GitHub token in Settings to save changes online.','error'); return; }
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(db[key], null, 2))));
+  const body = {message:`Update ${key}.json`, content, ...(shas[key]?{sha:shas[key]}:{})};
+  try {
+    const res = await fetch(API_BASE() + key + '.json', {
+      method:'PUT',
+      headers:{Authorization:'token '+token, 'Content-Type':'application/json', Accept:'application/vnd.github.v3+json'},
+      body: JSON.stringify(body)
+    });
+    if (res.ok) {
+      const j = await res.json();
+      shas[key] = j.content.sha;
+      setSyncStatus('Saved ' + new Date().toLocaleTimeString());
+    } else {
+      const err = await res.json();
+      flash('GitHub save failed: ' + (err.message||res.status), 'error');
+    }
+  } catch(e) { flash('Network error: '+e.message,'error'); }
+}
+
+function saveLocal() {
+  localStorage.setItem('lib_stores', JSON.stringify(db.stores));
+  localStorage.setItem('lib_items',  JSON.stringify(db.items));
+  localStorage.setItem('lib_currencies', JSON.stringify(db.currencies));
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderAll() { renderStores(); renderItems(); renderCurrencies(); }
+
+function renderStores() {
+  const q = (document.getElementById('search-stores')?.value||'').toLowerCase();
+  const rows = db.stores.filter(s =>
+    !q || (s.friendlyName+s.name+s.city+s.country+s.category).toLowerCase().includes(q)
+  );
+  document.getElementById('cnt-stores').textContent = db.stores.length;
+  const tbody = document.getElementById('stores-body');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3>No stores yet</h3><p>Add stores manually or they\'ll be imported from your receipts.</p></div></td></tr>'; return; }
+  tbody.innerHTML = rows.map(s => `
+    <tr>
+      <td><strong>${esc(s.friendlyName||s.name)}</strong></td>
+      <td>${esc(s.name)}</td>
+      <td>${esc(s.city||'')}</td>
+      <td>${esc(s.country||'')}</td>
+      <td>${s.category?`<span class="tag">${esc(s.category)}</span>`:''}</td>
+      <td style="font-size:.75rem;color:var(--text-muted)">${esc(s.vatNumber||'')}</td>
+      <td>${(s.aliases||[]).map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openStoreModal('${s.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('stores','${s.id}')">&#215;</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderItems() {
+  const q = (document.getElementById('search-items')?.value||'').toLowerCase();
+  const rows = db.items.filter(i =>
+    !q || (i.name+(i.aliases||[]).join(' ')+i.category).toLowerCase().includes(q)
+  );
+  document.getElementById('cnt-items').textContent = db.items.length;
+  const tbody = document.getElementById('items-body');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No items yet</h3><p>Items will be suggested from your receipts and shopping lists.</p></div></td></tr>'; return; }
+  tbody.innerHTML = rows.map(i => `
+    <tr>
+      <td><strong>${esc(i.name)}</strong></td>
+      <td>${(i.aliases||[]).map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</td>
+      <td>${i.category?`<span class="tag">${esc(i.category)}</span>`:''}</td>
+      <td>${esc(i.typicalUnit||'')}</td>
+      <td style="font-size:.82rem">${i.priceMin||i.priceMax ? (i.priceMin||'?')+' – '+(i.priceMax||'?') : ''}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openItemModal('${i.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('items','${i.id}')">&#215;</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderCurrencies() {
+  const q = (document.getElementById('search-currencies')?.value||'').toLowerCase();
+  const rows = db.currencies.filter(c =>
+    !q || (c.code+c.symbol+c.name).toLowerCase().includes(q)
+  );
+  document.getElementById('cnt-currencies').textContent = db.currencies.length;
+  const tbody = document.getElementById('currencies-body');
+  tbody.innerHTML = rows.map(c => `
+    <tr>
+      <td><strong>${esc(c.code)}</strong></td>
+      <td style="font-size:1.1rem">${esc(c.symbol)}</td>
+      <td>${esc(c.name)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openCurrencyModal('${c.code}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('currencies','${c.code}','code')">&#215;</button>
+      </td>
+    </tr>`).join('');
+}
+
+// ── Store CRUD ────────────────────────────────────────────────────────────────
+function openStoreModal(id) {
+  editId.stores = id || null;
+  document.getElementById('store-modal-title').textContent = id ? 'Edit Store' : 'Add Store';
+  const s = id ? db.stores.find(x=>x.id===id) : {};
+  ['friendly','name','address','city','country','vat','aliases'].forEach(f => {
+    const el = document.getElementById('s-'+f);
+    if (el) el.value = f==='aliases' ? (s?.aliases||[]).join(', ') : (s?.[fieldMap(f)]||'');
+  });
+  document.getElementById('s-category').value = s?.category||'';
+  document.getElementById('store-modal').classList.add('open');
+}
+const fieldMap = f => ({friendly:'friendlyName',name:'name',address:'address',city:'city',country:'country',vat:'vatNumber',aliases:'aliases'}[f]||f);
+
+function saveStore() {
+  const get = id => document.getElementById(id).value.trim();
+  const s = {
+    id: editId.stores || uid(),
+    friendlyName: get('s-friendly'),
+    name: get('s-name'),
+    address: get('s-address'),
+    city: get('s-city'),
+    country: get('s-country'),
+    category: get('s-category'),
+    vatNumber: get('s-vat'),
+    aliases: get('s-aliases').split(',').map(a=>a.trim()).filter(Boolean),
+    updatedAt: new Date().toISOString()
+  };
+  if (!s.name && !s.friendlyName) { flash('Enter at least a name.','error'); return; }
+  if (editId.stores) { const idx=db.stores.findIndex(x=>x.id===editId.stores); db.stores[idx]=s; }
+  else { s.createdAt=s.updatedAt; db.stores.push(s); }
+  saveLocal(); renderStores(); closeModal('store-modal');
+  pushToGitHub('stores'); flash('Store saved!','success');
+}
+
+// ── Item CRUD ─────────────────────────────────────────────────────────────────
+function openItemModal(id) {
+  editId.items = id || null;
+  document.getElementById('item-modal-title').textContent = id ? 'Edit Item' : 'Add Item';
+  const i = id ? db.items.find(x=>x.id===id) : {};
+  document.getElementById('i-name').value = i?.name||'';
+  document.getElementById('i-aliases').value = (i?.aliases||[]).join(', ');
+  document.getElementById('i-category').value = i?.category||'';
+  document.getElementById('i-unit').value = i?.typicalUnit||'';
+  document.getElementById('i-pmin').value = i?.priceMin||'';
+  document.getElementById('i-pmax').value = i?.priceMax||'';
+  document.getElementById('item-modal').classList.add('open');
+}
+
+function saveItem() {
+  const get = id => document.getElementById(id).value.trim();
+  const item = {
+    id: editId.items || uid(),
+    name: get('i-name'),
+    aliases: get('i-aliases').split(',').map(a=>a.trim()).filter(Boolean),
+    category: get('i-category'),
+    typicalUnit: get('i-unit'),
+    priceMin: parseFloat(get('i-pmin'))||null,
+    priceMax: parseFloat(get('i-pmax'))||null,
+    updatedAt: new Date().toISOString()
+  };
+  if (!item.name) { flash('Enter an item name.','error'); return; }
+  if (editId.items) { const idx=db.items.findIndex(x=>x.id===editId.items); db.items[idx]=item; }
+  else { item.createdAt=item.updatedAt; db.items.push(item); }
+  saveLocal(); renderItems(); closeModal('item-modal');
+  pushToGitHub('items'); flash('Item saved!','success');
+}
+
+// ── Currency CRUD ─────────────────────────────────────────────────────────────
+function openCurrencyModal(code) {
+  editId.currencies = code || null;
+  document.getElementById('currency-modal-title').textContent = code ? 'Edit Currency' : 'Add Currency';
+  const c = code ? db.currencies.find(x=>x.code===code) : {};
+  document.getElementById('c-code').value = c?.code||'';
+  document.getElementById('c-symbol').value = c?.symbol||'';
+  document.getElementById('c-name').value = c?.name||'';
+  document.getElementById('c-code').disabled = !!code;
+  document.getElementById('currency-modal').classList.add('open');
+}
+
+function saveCurrency() {
+  const code = document.getElementById('c-code').value.trim().toUpperCase();
+  const c = { code, symbol: document.getElementById('c-symbol').value.trim(), name: document.getElementById('c-name').value.trim() };
+  if (!c.code||!c.symbol) { flash('Code and symbol are required.','error'); return; }
+  if (editId.currencies) { const idx=db.currencies.findIndex(x=>x.code===editId.currencies); db.currencies[idx]=c; }
+  else {
+    if (db.currencies.find(x=>x.code===code)) { flash('Currency '+code+' already exists.','error'); return; }
+    db.currencies.push(c);
+  }
+  saveLocal(); renderCurrencies(); closeModal('currency-modal');
+  pushToGitHub('currencies'); flash('Currency saved!','success');
+}
+
+// ── Delete ────────────────────────────────────────────────────────────────────
+function deleteEntry(key, id, field='id') {
+  if (!confirm('Delete this entry?')) return;
+  db[key] = db[key].filter(x => x[field] !== id);
+  saveLocal(); renderAll();
+  pushToGitHub(key); flash('Deleted.','success');
+}
+
+// ── Modal helpers ─────────────────────────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); }));
+
+// ── Settings ──────────────────────────────────────────────────────────────────
+function toggleSettings() { document.getElementById('settings-panel').classList.toggle('open'); }
+
+// ── Export / Import ───────────────────────────────────────────────────────────
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='my-library.json'; a.click();
+}
+function importJSON(e) {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if(data.stores) db.stores = data.stores;
+      if(data.items)  db.items  = data.items;
+      if(data.currencies) db.currencies = data.currencies;
+      saveLocal(); renderAll();
+      flash('Imported successfully!','success');
+    } catch(ex) { flash('Invalid JSON file.','error'); }
+  };
+  reader.readAsText(file);
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function setSyncStatus(msg) { document.getElementById('sync-status').textContent = msg; }
+function flash(msg, type) {
+  const el = document.getElementById('flash');
+  el.textContent = msg; el.className = 'flash '+type+' show';
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
