@@ -37,6 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-ghost{background:none;border:1.5px solid var(--border);color:#444;}.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
 .btn-danger{background:var(--danger);color:#fff;}.btn-danger:hover{opacity:.88;}
 .btn-sm{padding:4px 10px;font-size:.78rem;}
+.btn-sync{background:var(--accent-light);border:1.5px solid var(--accent);color:var(--accent);}.btn-sync:hover{background:var(--accent);color:#fff;}
 
 /* ── Table ── */
 .data-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07);}
@@ -47,6 +48,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tag{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:.7rem;padding:2px 7px;border-radius:10px;margin:1px;}
 .empty-state{text-align:center;padding:48px 24px;color:var(--text-muted);}
 .empty-state h3{margin-bottom:8px;font-size:1.1rem;}
+
+/* ── Portal sync column ── */
+.portal-cell{font-size:.72rem;line-height:1.5;}
+.portal-never{color:var(--text-muted);}
+.portal-synced{color:var(--success);font-weight:600;}
+.portal-meta{color:var(--text-muted);font-weight:400;}
 
 /* ── Modal ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;align-items:center;justify-content:center;}
@@ -62,12 +69,53 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .field-group{margin-bottom:14px;}
 .field-group label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin-bottom:5px;}
 .field-group input,.field-group select,.field-group textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;font-family:inherit;}
-.field-group input:focus,.field-group select:focus{outline:none;border-color:var(--accent);}
+.field-group textarea{resize:vertical;min-height:56px;}
+.field-group input:focus,.field-group select:focus,.field-group textarea:focus{outline:none;border-color:var(--accent);}
 .field-row{display:flex;gap:12px;}.field-row .field-group{flex:1;}
 .hint{font-size:.72rem;color:var(--text-muted);margin-top:3px;}
+.section-divider{border-top:1px solid var(--border);margin:18px 0 14px;}
+.section-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:12px;}
+
+/* ── Sync modal ── */
+.sync-stat-row{display:flex;gap:28px;margin-bottom:16px;}
+.sync-stat{display:flex;flex-direction:column;}
+.sync-stat-val{font-weight:700;font-size:.92rem;}
+.sync-stat-lbl{font-size:.72rem;color:var(--text-muted);}
+.sync-instructions{background:#f5f5f7;border-radius:8px;padding:14px;margin-top:4px;}
+.sync-instructions ol{font-size:.83rem;line-height:1.8;padding-left:18px;}
+.sync-prompt{display:inline-block;background:var(--accent);color:#fff;border-radius:4px;padding:2px 8px;font-family:monospace;font-size:.82rem;}
 
 /* ── Settings panel ── */
 .settings-panel{display:none;position:fixed;top:48px;right:0;width:340px;height:calc(100vh - 48px);background:var(--surface);border-left:1px solid var(--border);box-shadow:-4px 0 20px rgba(0,0,0,.12);z-index:500;padding:22px;overflow-y:auto;}
+.settings-panel.open{display:block;}
+.settings-panel h3{font-size:.95rem;font-weight:700;margin-bottom:16px;}
+.settings-panel .field-group{margin-bottom:12px;}
+
+/* ── Flash ── */
+.flash{padding:8px 14px;border-radius:6px;font-size:.82rem;margin-bottom:12px;display:none;}
+.flash.success{background:#e6f9ed;border:1px solid var(--success);color:var(--success);}
+.flash.error{background:#fff5f5;border:1px solid var(--danger);color:var(--danger);}
+.flash.show{display:block;}
+
+/* ── Count badge ── */
+.count-badge{font-size:.7rem;background:var(--accent);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <a href="https://my-apps-eight-beryl.vercel.app/">&#8592; My Apps</a>
+  <span class="app-title">&#128218; My Library</span>
+  <span class="header-spacer"></span>
+  <span class="sync-status" id="sync-status">Loading...</span>
+  <button class="btn-icon" onclick="syncFromGitHub()">&#8635; Sync</button>
+  <button class="btn-icon" onclick="toggleSettings()">&#9881;</button>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="stores" onclick="switchTab('stores',this)">Stores <span class="count-badge" id="cnt-stores">0</span></div>
+  <div class="tab" data-tab="items" onclick="switchTab('items',this)">Items <span class="count-badge" id="cnt-items">0</span></div>
+  <div class="tab" data-tab="currencies" onclick="switchTab(ox-shadow:-4px 0 20px rgba(0,0,0,.12);z-index:500;padding:22px;overflow-y:auto;}
 .settings-panel.open{display:block;}
 .settings-panel h3{font-size:.95rem;font-weight:700;margin-bottom:16px;}
 .settings-panel .field-group{margin-bottom:12px;}
@@ -110,7 +158,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <table class="data-table">
       <thead><tr>
-        <th>Friendly Name</th><th>Official Name</th><th>City</th><th>Country</th><th>Category</th><th>VAT</th><th>Aliases</th><th></th>
+        <th>Friendly Name</th><th>Official Name</th><th>City</th><th>Country</th><th>Category</th><th>VAT</th><th>Aliases</th><th>Portal Sync</th><th></th>
       </tr></thead>
       <tbody id="stores-body"></tbody>
     </table>
@@ -178,6 +226,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <input id="s-aliases" placeholder="e.g. COOP, COOP SPA, COOP ITALIA">
         <div class="hint">Used by OCR to match this store from receipt text</div>
       </div>
+
+      <!-- ── Portal Sync section ── -->
+      <div class="section-divider"></div>
+      <div class="section-label">Portal Sync <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.72rem;color:var(--text-muted)">(optional)</span></div>
+      <div class="field-group">
+        <label>Portal Login URL</label>
+        <input id="s-portal-url" placeholder="e.g. https://customer.lidl.co.uk/login">
+        <div class="hint">The login page for this store's online receipt portal</div>
+      </div>
+      <div class="field-group">
+        <label>Username / Email hint</label>
+        <input id="s-portal-user" placeholder="e.g. you@email.com">
+        <div class="hint">For reference only — credentials are never stored by the app</div>
+      </div>
+      <div class="field-group">
+        <label>Sync Notes</label>
+        <textarea id="s-portal-notes" placeholder="e.g. Navigate to Account &gt; Purchases after login"></textarea>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('store-modal')">Cancel</button>
@@ -240,6 +306,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('currency-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="saveCurrency()">Save Currency</button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAL SYNC MODAL -->
+<div class="modal-overlay" id="sync-modal">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-header">
+      <h3 id="sync-modal-title">Sync Receipts</h3>
+      <button class="modal-close" onclick="closeModal('sync-modal')">&#215;</button>
+    </div>
+    <div class="modal-body" id="sync-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('sync-modal')">Close</button>
+      <button class="btn btn-primary" id="sync-open-btn">Open Portal &rarr;</button>
     </div>
   </div>
 </div>
@@ -315,7 +396,6 @@ window.onload = () => {
 };
 
 // ── URL pre-fill ─────────────────────────────────────────────────────────────
-// Supports ?action=create&type=store|item|currency&name=...&friendlyName=...etc
 function handleUrlParams() {
   const p = new URLSearchParams(window.location.search);
   if (p.get('action') !== 'create') return;
@@ -344,7 +424,6 @@ function handleUrlParams() {
     if (p.get('symbol'))       document.getElementById('c-symbol').value       = p.get('symbol');
     if (p.get('name'))         document.getElementById('c-name').value         = p.get('name');
   }
-  // Clean URL so a refresh doesn't re-open the modal
   window.history.replaceState({}, '', window.location.pathname);
 }
 
@@ -368,9 +447,27 @@ async function syncFromGitHub() {
       const res = await fetch(RAW_BASE() + key + '.json?t=' + Date.now());
       if (res.ok) {
         const data = await res.json();
-        if (Array.isArray(data)) { db[key] = data; anyLoaded = true; }
+        if (Array.isArray(data)) {
+          // Merge: preserve local portal/sync fields not in GitHub data
+          if (key === 'stores') {
+            const localMap = Object.fromEntries(db.stores.map(s => [s.id, s]));
+            db.stores = data.map(s => {
+              const local = localMap[s.id] || {};
+              return {
+                ...s,
+                portalUrl:   s.portalUrl   !== undefined ? s.portalUrl   : (local.portalUrl   || null),
+                portalUser:  s.portalUser  !== undefined ? s.portalUser  : (local.portalUser  || null),
+                portalNotes: s.portalNotes !== undefined ? s.portalNotes : (local.portalNotes || null),
+                lastSynced:  s.lastSynced  !== undefined ? s.lastSynced  : (local.lastSynced  || null),
+                syncedIds:   s.syncedIds   !== undefined ? s.syncedIds   : (local.syncedIds   || [])
+              };
+            });
+          } else {
+            db[key] = data;
+          }
+          anyLoaded = true;
+        }
       }
-      // Fetch SHA for writes
       if (GH_TOKEN()) {
         const apiRes = await fetch(API_BASE() + key + '.json', {
           headers: {Authorization:'token '+GH_TOKEN(), Accept:'application/vnd.github.v3+json'}
@@ -427,9 +524,23 @@ function renderStores() {
   );
   document.getElementById('cnt-stores').textContent = db.stores.length;
   const tbody = document.getElementById('stores-body');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><h3>No stores yet</h3><p>Add stores manually or they\'ll be imported from your receipts.</p></div></td></tr>'; return; }
-  tbody.innerHTML = rows.map(s => `
-    <tr>
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><h3>No stores yet</h3><p>Add stores manually or they\'ll be imported from your receipts.</p></div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(s => {
+    const hasPortal = !!s.portalUrl;
+    const tracked = (s.syncedIds || []).length;
+    let portalCell = '';
+    if (hasPortal) {
+      if (s.lastSynced) {
+        const d = new Date(s.lastSynced).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+        portalCell = `<div class="portal-cell"><span class="portal-synced">&#10003; ${d}</span><br><span class="portal-meta">${tracked} receipt${tracked!==1?'s':''} tracked</span></div>`;
+      } else {
+        portalCell = `<div class="portal-cell portal-never">Portal configured<br>Never synced</div>`;
+      }
+    }
+    return `<tr>
       <td><strong>${esc(s.friendlyName||s.name)}</strong></td>
       <td>${esc(s.name)}</td>
       <td>${esc(s.city||'')}</td>
@@ -437,11 +548,14 @@ function renderStores() {
       <td>${s.category?`<span class="tag">${esc(s.category)}</span>`:''}</td>
       <td style="font-size:.75rem;color:var(--text-muted)">${esc(s.vatNumber||'')}</td>
       <td>${(s.aliases||[]).map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</td>
+      <td>${portalCell}</td>
       <td style="white-space:nowrap">
+        ${hasPortal ? `<button class="btn btn-sync btn-sm" onclick="openSyncModal('${s.id}')">&#8635; Sync</button> ` : ''}
         <button class="btn btn-ghost btn-sm" onclick="openStoreModal('${s.id}')">Edit</button>
         <button class="btn btn-danger btn-sm" onclick="deleteEntry('stores','${s.id}')">&#215;</button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 }
 
 function renderItems() {
@@ -451,36 +565,7 @@ function renderItems() {
   );
   document.getElementById('cnt-items').textContent = db.items.length;
   const tbody = document.getElementById('items-body');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No items yet</h3><p>Items will be suggested from your receipts and shopping lists.</p></div></td></tr>'; return; }
-  tbody.innerHTML = rows.map(i => `
-    <tr>
-      <td><strong>${esc(i.name)}</strong></td>
-      <td>${(i.aliases||[]).map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</td>
-      <td>${i.category?`<span class="tag">${esc(i.category)}</span>`:''}</td>
-      <td>${esc(i.typicalUnit||'')}</td>
-      <td style="font-size:.82rem">${i.priceMin||i.priceMax ? (i.priceMin||'?')+' – '+(i.priceMax||'?') : ''}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-ghost btn-sm" onclick="openItemModal('${i.id}')">Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteEntry('items','${i.id}')">&#215;</button>
-      </td>
-    </tr>`).join('');
-}
-
-function renderCurrencies() {
-  const q = (document.getElementById('search-currencies')?.value||'').toLowerCase();
-  const rows = db.currencies.filter(c =>
-    !q || (c.code+c.symbol+c.name).toLowerCase().includes(q)
-  );
-  document.getElementById('cnt-currencies').textContent = db.currencies.length;
-  const tbody = document.getElementById('currencies-body');
-  tbody.innerHTML = rows.map(c => `
-    <tr>
-      <td><strong>${esc(c.code)}</strong></td>
-      <td style="font-size:1.1rem">${esc(c.symbol)}</td>
-      <td>${esc(c.name)}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-ghost btn-sm" onclick="openCurrencyModal('${c.code}')">Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteEntry('currencies','${c.code}','code')">&#215;</button>
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No items yet</h3><p>Items will be suggested from your receipts and shopping lists.>&#215;</button>
       </td>
     </tr>`).join('');
 }
@@ -489,36 +574,134 @@ function renderCurrencies() {
 function openStoreModal(id) {
   editId.stores = id || null;
   document.getElementById('store-modal-title').textContent = id ? 'Edit Store' : 'Add Store';
-  const s = id ? db.stores.find(x=>x.id===id) : {};
-  ['friendly','name','address','city','country','vat','aliases'].forEach(f => {
-    const el = document.getElementById('s-'+f);
-    if (el) el.value = f==='aliases' ? (s?.aliases||[]).join(', ') : (s?.[fieldMap(f)]||'');
-  });
-  document.getElementById('s-category').value = s?.category||'';
+  const s = id ? db.stores.find(x => x.id === id) : {};
+  document.getElementById('s-friendly').value     = s?.friendlyName || '';
+  document.getElementById('s-name').value         = s?.name || '';
+  document.getElementById('s-address').value      = s?.address || '';
+  document.getElementById('s-city').value         = s?.city || '';
+  document.getElementById('s-country').value      = s?.country || '';
+  document.getElementById('s-vat').value          = s?.vatNumber || '';
+  document.getElementById('s-aliases').value      = (s?.aliases || []).join(', ');
+  document.getElementById('s-category').value     = s?.category || '';
+  document.getElementById('s-portal-url').value   = s?.portalUrl || '';
+  document.getElementById('s-portal-user').value  = s?.portalUser || '';
+  document.getElementById('s-portal-notes').value = s?.portalNotes || '';
   document.getElementById('store-modal').classList.add('open');
 }
-const fieldMap = f => ({friendly:'friendlyName',name:'name',address:'address',city:'city',country:'country',vat:'vatNumber',aliases:'aliases'}[f]||f);
 
 function saveStore() {
   const get = id => document.getElementById(id).value.trim();
+  const existing = editId.stores ? (db.stores.find(x => x.id === editId.stores) || {}) : {};
   const s = {
     id: editId.stores || uid(),
     friendlyName: get('s-friendly'),
-    name: get('s-name'),
-    address: get('s-address'),
-    city: get('s-city'),
-    country: get('s-country'),
-    category: get('s-category'),
-    vatNumber: get('s-vat'),
-    aliases: get('s-aliases').split(',').map(a=>a.trim()).filter(Boolean),
-    updatedAt: new Date().toISOString()
+    name:         get('s-name'),
+    address:      get('s-address'),
+    city:         get('s-city'),
+    country:      get('s-country'),
+    category:     get('s-category'),
+    vatNumber:    get('s-vat'),
+    aliases:      get('s-aliases').split(',').map(a => a.trim()).filter(Boolean),
+    // Portal fields
+    portalUrl:    get('s-portal-url') || null,
+    portalUser:   get('s-portal-user') || null,
+    portalNotes:  get('s-portal-notes') || null,
+    // Preserve sync tracking
+    lastSynced:   existing.lastSynced || null,
+    syncedIds:    existing.syncedIds  || [],
+    updatedAt:    new Date().toISOString()
   };
   if (!s.name && !s.friendlyName) { flash('Enter at least a name.','error'); return; }
-  if (editId.stores) { const idx=db.stores.findIndex(x=>x.id===editId.stores); db.stores[idx]=s; }
-  else { s.createdAt=s.updatedAt; db.stores.push(s); }
+  if (editId.stores) {
+    const idx = db.stores.findIndex(x => x.id === editId.stores);
+    db.stores[idx] = s;
+  } else {
+    s.createdAt = s.updatedAt;
+    db.stores.push(s);
+  }
   saveLocal(); renderStores(); closeModal('store-modal');
   pushToGitHub('stores'); flash('Store saved!','success');
 }
+
+// ── Portal Sync ───────────────────────────────────────────────────────────────
+function openSyncModal(storeId) {
+  const s = db.stores.find(x => x.id === storeId);
+  if (!s || !s.portalUrl) return;
+  const storeName = esc(s.friendlyName || s.name);
+  document.getElementById('sync-modal-title').textContent = 'Sync: ' + (s.friendlyName || s.name);
+
+  const lastSync   = s.lastSynced ? new Date(s.lastSynced).toLocaleString('en-GB', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : 'Never';
+  const tracked    = (s.syncedIds || []).length;
+  const portalUser = s.portalUser ? `<div style="font-size:.82rem;color:var(--text-muted);margin-top:3px">Username hint: ${esc(s.portalUser)}</div>` : '';
+  const notes      = s.portalNotes ? `<div style="font-size:.82rem;color:var(--text-muted);margin-top:3px;font-style:italic">${esc(s.portalNotes)}</div>` : '';
+
+  document.getElementById('sync-modal-body').innerHTML = `
+    <div style="margin-bottom:16px">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px">Portal</div>
+      <a href="${esc(s.portalUrl)}" target="_blank" style="color:var(--accent);word-break:break-all;font-size:.85rem">${esc(s.portalUrl)}</a>
+      ${portalUser}${notes}
+    </div>
+    <div class="sync-stat-row">
+      <div class="sync-stat">
+        <span class="sync-stat-val">${lastSync}</span>
+        <span class="sync-stat-lbl">Last synced</span>
+      </div>
+      <div class="sync-stat">
+        <span class="sync-stat-val">${tracked}</span>
+        <span class="sync-stat-lbl">Receipts tracked (won't re-import)</span>
+      </div>
+    </div>
+    <div class="sync-instructions">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">How to sync</div>
+      <ol>
+        <li>Click <strong>Open Portal</strong> below — the store login page opens in a new tab</li>
+        <li>Log in to your account (credentials stay in your browser only)</li>
+        <li>Come back to Cowork and say:<br>
+          <span class="sync-prompt">sync receipts from ${storeName}</span>
+        </li>
+        <li>Claude will read the open tab, skip already-imported receipts, and add new ones to My Receipts</li>
+      </ol>
+    </div>
+  `;
+
+  document.getElementById('sync-open-btn').onclick = () => {
+    window.open(s.portalUrl, '_blank');
+  };
+  document.getElementById('sync-modal').classList.add('open');
+}
+
+// ── Called by Claude after a sync to update tracking ─────────────────────────
+// Usage: window.updateStoreSyncStatus(storeId, isoTimestamp, ['id1','id2',...])
+window.updateStoreSyncStatus = function(storeId, lastSynced, newSyncedIds) {
+  const idx = db.stores.findIndex(x => x.id === storeId);
+  if (idx === -1) return {ok:false, error:'Store not found: '+storeId};
+  const existing = db.stores[idx].syncedIds || [];
+  const merged = [...new Set([...existing, ...newSyncedIds])];
+  db.stores[idx].lastSynced  = lastSynced || new Date().toISOString();
+  db.stores[idx].syncedIds   = merged;
+  db.stores[idx].updatedAt   = new Date().toISOString();
+  saveLocal(); renderStores();
+  pushToGitHub('stores');
+  return {ok:true, totalTracked: merged.length};
+};
+
+// ── Returns portal config for a store (used by Claude during sync) ─────────────
+window.getStorePortalData = function(nameOrId) {
+  const s = db.stores.find(x =>
+    x.id === nameOrId ||
+    (x.friendlyName||'').toLowerCase() === nameOrId.toLowerCase() ||
+    (x.name||'').toLowerCase() === nameOrId.toLowerCase()
+  );
+  if (!s) return null;
+  return {
+    id:          s.id,
+    name:        s.friendlyName || s.name,
+    portalUrl:   s.portalUrl,
+    portalUser:  s.portalUser,
+    syncedIds:   s.syncedIds || [],
+    lastSynced:  s.lastSynced
+  };
+};
 
 // ── Item CRUD ─────────────────────────────────────────────────────────────────
 function openItemModal(id) {
