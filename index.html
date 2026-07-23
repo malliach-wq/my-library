@@ -115,35 +115,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="tabs">
   <div class="tab active" data-tab="stores" onclick="switchTab('stores',this)">Stores <span class="count-badge" id="cnt-stores">0</span></div>
   <div class="tab" data-tab="items" onclick="switchTab('items',this)">Items <span class="count-badge" id="cnt-items">0</span></div>
-  <div class="tab" data-tab="currencies" onclick="switchTab(ox-shadow:-4px 0 20px rgba(0,0,0,.12);z-index:500;padding:22px;overflow-y:auto;}
-.settings-panel.open{display:block;}
-.settings-panel h3{font-size:.95rem;font-weight:700;margin-bottom:16px;}
-.settings-panel .field-group{margin-bottom:12px;}
-
-/* ── Flash ── */
-.flash{padding:8px 14px;border-radius:6px;font-size:.82rem;margin-bottom:12px;display:none;}
-.flash.success{background:#e6f9ed;border:1px solid var(--success);color:var(--success);}
-.flash.error{background:#fff5f5;border:1px solid var(--danger);color:var(--danger);}
-.flash.show{display:block;}
-
-/* ── Count badge ── */
-.count-badge{font-size:.7rem;background:var(--accent);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;}
-</style>
-</head>
-<body>
-
-<div class="app-header">
-  <a href="https://my-apps-eight-beryl.vercel.app/">&#8592; My Apps</a>
-  <span class="app-title">&#128218; My Library</span>
-  <span class="header-spacer"></span>
-  <span class="sync-status" id="sync-status">Loading...</span>
-  <button class="btn-icon" onclick="syncFromGitHub()">&#8635; Sync</button>
-  <button class="btn-icon" onclick="toggleSettings()">&#9881;</button>
-</div>
-
-<div class="tabs">
-  <div class="tab active" data-tab="stores" onclick="switchTab('stores',this)">Stores <span class="count-badge" id="cnt-stores">0</span></div>
-  <div class="tab" data-tab="items" onclick="switchTab('items',this)">Items <span class="count-badge" id="cnt-items">0</span></div>
   <div class="tab" data-tab="currencies" onclick="switchTab('currencies',this)">Currencies <span class="count-badge" id="cnt-currencies">0</span></div>
 </div>
 
@@ -490,7 +461,7 @@ async function pushToGitHub(key) {
   const token = GH_TOKEN();
   if (!token) { flash('Enter a GitHub token in Settings to save changes online.','error'); return; }
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(db[key], null, 2))));
-  const body = {message:`Update ${key}.json`, content, ...(shas[key]?{sha:shas[key]}:{})};
+  const body = {message:`Update ${key}.json`, content, ...(shas[key]}{sha:shas[key]}:{})};
   try {
     const res = await fetch(API_BASE() + key + '.json', {
       method:'PUT',
@@ -565,7 +536,36 @@ function renderItems() {
   );
   document.getElementById('cnt-items').textContent = db.items.length;
   const tbody = document.getElementById('items-body');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No items yet</h3><p>Items will be suggested from your receipts and shopping lists.>&#215;</button>
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No items yet</h3><p>Items will be suggested from your receipts and shopping lists.</p></div></td></tr>'; return; }
+  tbody.innerHTML = rows.map(i => `
+    <tr>
+      <td><strong>${esc(i.name)}</strong></td>
+      <td>${(i.aliases||[]).map(a=>`<span class="tag">${esc(a)}</span>`).join('')}</td>
+      <td>${i.category?`<span class="tag">${esc(i.category)}</span>`:''}</td>
+      <td>${esc(i.typicalUnit||'')}</td>
+      <td style="font-size:.82rem">${i.priceMin||i.priceMax ? (i.priceMin||'?')+' – '+(i.priceMax||'?') : ''}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openItemModal('${i.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('items','${i.id}')">&#215;</button>
+      </td>
+    </tr>`).join('');
+}
+
+function renderCurrencies() {
+  const q = (document.getElementById('search-currencies')?.value||'').toLowerCase();
+  const rows = db.currencies.filter(c =>
+    !q || (c.code+c.symbol+c.name).toLowerCase().includes(q)
+  );
+  document.getElementById('cnt-currencies').textContent = db.currencies.length;
+  const tbody = document.getElementById('currencies-body');
+  tbody.innerHTML = rows.map(c => `
+    <tr>
+      <td><strong>${esc(c.code)}</strong></td>
+      <td style="font-size:1.1rem">${esc(c.symbol)}</td>
+      <td>${esc(c.name)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="openCurrencyModal('${c.code}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('currencies','${c.code}','code')">&#215;</button>
       </td>
     </tr>`).join('');
 }
