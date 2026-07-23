@@ -461,7 +461,7 @@ async function pushToGitHub(key) {
   const token = GH_TOKEN();
   if (!token) { flash('Enter a GitHub token in Settings to save changes online.','error'); return; }
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(db[key], null, 2))));
-  const body = {message:`Update ${key}.json`, content, ...(shas[key]}{sha:shas[key]}:{})};
+  const body = {message:`Update ${key}.json`, content, ...(shas[key]?{sha:shas[key]}:{})};
   try {
     const res = await fetch(API_BASE() + key + '.json', {
       method:'PUT',
