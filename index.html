@@ -99,6 +99,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 /* ── Count badge ── */
 .count-badge{font-size:.7rem;background:var(--accent);color:#fff;border-radius:10px;padding:1px 6px;margin-left:4px;}
+
+/* ── Outlets ── */
+.outlet-header{display:grid;grid-template-columns:100px 1.5fr 100px 130px 28px;gap:6px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);padding:0 2px;margin-bottom:4px;}
+.outlet-row{display:grid;grid-template-columns:100px 1.5fr 100px 130px 28px;gap:6px;align-items:center;margin-bottom:5px;padding:7px 8px;background:#f8f4fb;border-radius:6px;border:1px solid var(--border);}
+.outlet-row input{padding:5px 7px;border:1px solid var(--border);border-radius:4px;font-size:.82rem;font-family:inherit;width:100%;}
+.outlet-row input:focus{outline:none;border-color:var(--accent);}
+.outlet-add-btn{background:none;border:1.5px dashed var(--border);color:var(--text-muted);border-radius:6px;padding:6px 0;cursor:pointer;font-size:.8rem;width:100%;margin-top:4px;text-align:center;}
+.outlet-add-btn:hover{border-color:var(--accent);color:var(--accent);}
+.outlet-remove{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;padding:0;line-height:1;text-align:center;}
+.outlet-remove:hover{color:var(--danger);}
 </style>
 </head>
 <body>
@@ -129,7 +139,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
     <table class="data-table">
       <thead><tr>
-        <th>Friendly Name</th><th>Official Name</th><th>City</th><th>Country</th><th>Category</th><th>VAT</th><th>Aliases</th><th>Portal Sync</th><th></th>
+        <th>Friendly Name</th><th>Official Name</th><th>Outlets</th><th>Country</th><th>Category</th><th>VAT</th><th>Aliases</th><th>Portal Sync</th><th></th>
       </tr></thead>
       <tbody id="stores-body"></tbody>
     </table>
@@ -177,10 +187,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="field-group"><label>Official Name (on receipt)</label><input id="s-name" placeholder="e.g. COOP ITALIA SPA"></div>
       </div>
       <div class="field-row">
-        <div class="field-group"><label>Address</label><input id="s-address" placeholder="e.g. Via Roma 1"></div>
-        <div class="field-group"><label>City</label><input id="s-city" placeholder="e.g. Milan"></div>
-      </div>
-      <div class="field-row">
         <div class="field-group"><label>Country</label><input id="s-country" placeholder="e.g. Italy"></div>
         <div class="field-group"><label>Category</label>
           <select id="s-category">
@@ -191,7 +197,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </select>
         </div>
       </div>
-      <div class="field-group"><label>VAT Number</label><input id="s-vat" placeholder="e.g. IT12345678901"></div>
+      <div class="field-group">
+        <label>Default VAT Number</label>
+        <input id="s-vat" placeholder="e.g. MT12345678">
+        <div class="hint">Shared across all outlets. Individual outlets can override this if needed.</div>
+      </div>
+
+      <!-- ── Outlets section ── -->
+      <div class="section-divider"></div>
+      <div class="section-label" style="display:flex;align-items:center;justify-content:space-between">
+        <span>Outlets</span>
+        <button type="button" onclick="addOutletRow()" class="btn btn-ghost btn-sm">+ Add Outlet</button>
+      </div>
+      <div class="outlet-header"><span>Label</span><span>Address</span><span>City</span><span>VAT Override</span><span></span></div>
+      <div id="s-outlets-list"></div>
+      <div class="hint" style="margin-top:4px">Add one row per physical location. Leave VAT blank to inherit the default above.</div>
       <div class="field-group">
         <label>Aliases (comma-separated receipt name variants)</label>
         <input id="s-aliases" placeholder="e.g. COOP, COOP SPA, COOP ITALIA">
@@ -357,11 +377,28 @@ let shas = {};
 let editId = {stores:null, items:null, currencies:null};
 let activeTab = 'stores';
 
+// ── Migration: old address/city → outlets array ───────────────────────────────
+function migrateStores() {
+  db.stores = db.stores.map(s => {
+    if (s.outlets) return s; // already migrated
+    const outlet = (s.address || s.city) ? [{
+      id:        uid(),
+      label:     s.city || 'Main',
+      address:   s.address || '',
+      city:      s.city || '',
+      vatNumber: null
+    }] : [];
+    const { address, city, ...rest } = s; // strip old fields
+    return { ...rest, outlets: outlet };
+  });
+}
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 window.onload = () => {
   document.getElementById('gh-token').value = GH_TOKEN();
   document.getElementById('gh-owner').value = GH_OWNER();
   document.getElementById('gh-repo').value  = GH_REPO();
+  migrateStores();
   renderAll();
   syncFromGitHub().then(() => handleUrlParams());
 };
@@ -376,11 +413,11 @@ function handleUrlParams() {
     openStoreModal();
     if (p.get('name'))         document.getElementById('s-name').value         = p.get('name');
     if (p.get('friendlyName')) document.getElementById('s-friendly').value     = p.get('friendlyName');
-    if (p.get('city'))         document.getElementById('s-city').value         = p.get('city');
     if (p.get('country'))      document.getElementById('s-country').value      = p.get('country');
     if (p.get('vatNumber'))    document.getElementById('s-vat').value          = p.get('vatNumber');
     if (p.get('aliases'))      document.getElementById('s-aliases').value      = p.get('aliases');
     if (p.get('category'))     document.getElementById('s-category').value     = p.get('category');
+    if (p.get('city'))         addOutletRow({city: p.get('city'), address: p.get('address')||''});
   } else if (type === 'item') {
     switchTab('items');
     openItemModal();
@@ -448,6 +485,7 @@ async function syncFromGitHub() {
     } catch(e) {}
   }
   if (anyLoaded) {
+    migrateStores();
     saveLocal();
     renderAll();
     setSyncStatus('Synced ' + new Date().toLocaleTimeString());
@@ -490,9 +528,11 @@ function renderAll() { renderStores(); renderItems(); renderCurrencies(); }
 
 function renderStores() {
   const q = (document.getElementById('search-stores')?.value||'').toLowerCase();
-  const rows = db.stores.filter(s =>
-    !q || (s.friendlyName+s.name+s.city+s.country+s.category).toLowerCase().includes(q)
-  );
+  const rows = db.stores.filter(s => {
+    if (!q) return true;
+    const outletText = (s.outlets||[]).map(o=>(o.label||'')+(o.city||'')).join(' ');
+    return (s.friendlyName+s.name+outletText+s.country+s.category).toLowerCase().includes(q);
+  });
   document.getElementById('cnt-stores').textContent = db.stores.length;
   const tbody = document.getElementById('stores-body');
   if (!rows.length) {
@@ -511,10 +551,14 @@ function renderStores() {
         portalCell = `<div class="portal-cell portal-never">Portal configured<br>Never synced</div>`;
       }
     }
+    const outlets = s.outlets || [];
+    const outletCell = outlets.length
+      ? outlets.map(o => `<span class="tag" title="${esc(o.address||'')}&#10;${esc(o.city||'')}">${esc(o.label||o.city||'—')}</span>`).join('')
+      : (s.city ? `<span style="color:var(--text-muted);font-size:.8rem">${esc(s.city)}</span>` : '<span style="color:var(--text-muted);font-size:.75rem">—</span>');
     return `<tr>
       <td><strong>${esc(s.friendlyName||s.name)}</strong></td>
       <td>${esc(s.name)}</td>
-      <td>${esc(s.city||'')}</td>
+      <td>${outletCell}</td>
       <td>${esc(s.country||'')}</td>
       <td>${s.category?`<span class="tag">${esc(s.category)}</span>`:''}</td>
       <td style="font-size:.75rem;color:var(--text-muted)">${esc(s.vatNumber||'')}</td>
@@ -577,8 +621,6 @@ function openStoreModal(id) {
   const s = id ? db.stores.find(x => x.id === id) : {};
   document.getElementById('s-friendly').value     = s?.friendlyName || '';
   document.getElementById('s-name').value         = s?.name || '';
-  document.getElementById('s-address').value      = s?.address || '';
-  document.getElementById('s-city').value         = s?.city || '';
   document.getElementById('s-country').value      = s?.country || '';
   document.getElementById('s-vat').value          = s?.vatNumber || '';
   document.getElementById('s-aliases').value      = (s?.aliases || []).join(', ');
@@ -586,22 +628,46 @@ function openStoreModal(id) {
   document.getElementById('s-portal-url').value   = s?.portalUrl || '';
   document.getElementById('s-portal-user').value  = s?.portalUser || '';
   document.getElementById('s-portal-notes').value = s?.portalNotes || '';
+  // Outlets
+  document.getElementById('s-outlets-list').innerHTML = '';
+  const outlets = s?.outlets || (s?.city ? [{label: s.city, address: s.address||'', city: s.city, vatNumber: null}] : []);
+  outlets.forEach(o => addOutletRow(o));
   document.getElementById('store-modal').classList.add('open');
+}
+
+function addOutletRow(outlet = {}) {
+  const list = document.getElementById('s-outlets-list');
+  const row = document.createElement('div');
+  row.className = 'outlet-row';
+  row.dataset.outletId = outlet.id || '';
+  row.innerHTML = `
+    <input class="s-o-label"   placeholder="Label (e.g. Mosta)" value="${esc(outlet.label||'')}">
+    <input class="s-o-address" placeholder="Address"             value="${esc(outlet.address||'')}">
+    <input class="s-o-city"    placeholder="City"                value="${esc(outlet.city||'')}">
+    <input class="s-o-vat"     placeholder="VAT override"        value="${esc(outlet.vatNumber||'')}">
+    <button type="button" class="outlet-remove" onclick="this.closest('.outlet-row').remove()" title="Remove">&#215;</button>`;
+  list.appendChild(row);
 }
 
 function saveStore() {
   const get = id => document.getElementById(id).value.trim();
   const existing = editId.stores ? (db.stores.find(x => x.id === editId.stores) || {}) : {};
+  const outlets = [...document.querySelectorAll('#s-outlets-list .outlet-row')].map(row => ({
+    id:        row.dataset.outletId || uid(),
+    label:     row.querySelector('.s-o-label').value.trim(),
+    address:   row.querySelector('.s-o-address').value.trim(),
+    city:      row.querySelector('.s-o-city').value.trim(),
+    vatNumber: row.querySelector('.s-o-vat').value.trim() || null
+  })).filter(o => o.label || o.address || o.city);
   const s = {
     id: editId.stores || uid(),
     friendlyName: get('s-friendly'),
     name:         get('s-name'),
-    address:      get('s-address'),
-    city:         get('s-city'),
     country:      get('s-country'),
     category:     get('s-category'),
-    vatNumber:    get('s-vat'),
+    vatNumber:    get('s-vat') || null,
     aliases:      get('s-aliases').split(',').map(a => a.trim()).filter(Boolean),
+    outlets,
     // Portal fields
     portalUrl:    get('s-portal-url') || null,
     portalUser:   get('s-portal-user') || null,
@@ -746,6 +812,11 @@ window.getStorePortalData = function(nameOrId) {
     name:        s.friendlyName || s.name,
     portalUrl:   s.portalUrl,
     portalUser:  s.portalUser,
+    vatNumber:   s.vatNumber || null,
+    outlets:     (s.outlets || []).map(o => ({
+      ...o,
+      vatNumber: o.vatNumber || s.vatNumber || null  // resolve inheritance
+    })),
     syncedIds:   s.syncedIds || [],
     lastSynced:  s.lastSynced
   };
